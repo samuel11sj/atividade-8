@@ -1,0 +1,65 @@
+function addComment() {
+    const commentInput = document.getElementById('commentInput');
+    const commentsList = document.getElementById('commentsList');
+    const commentText = commentInput.value.trim(); // .trim() remove espaços em branco extras
+
+    if (commentText === '') {
+        alert('Por favor, digite um comentário antes de adicionar.');
+        return;
+    }
+
+    // Cria o elemento do comentário
+    const commentItem = document.createElement('div');
+    commentItem.classList.add('comment-item');
+
+    const paragraph = document.createElement('p');
+    paragraph.classList.add('comment-text');
+    paragraph.textContent = commentText;
+
+    // Cria a área de botões de ação
+    const actionsDiv = document.createElement('div');
+    actionsDiv.classList.add('comment-actions');
+
+    const editButton = document.createElement('button');
+    editButton.classList.add('edit-btn');
+    editButton.textContent = 'Editar';
+    editButton.onclick = function() {
+        editComment(paragraph);
+    };
+
+    const removeButton = document.createElement('button');
+    removeButton.classList.add('remove-btn');
+    removeButton.textContent = 'Remover';
+    removeButton.onclick = function() {
+        removeComment(commentItem);
+    };
+
+    actionsDiv.appendChild(editButton);
+    actionsDiv.appendChild(removeButton);
+
+    commentItem.appendChild(paragraph);
+    commentItem.appendChild(actionsDiv);
+
+    commentsList.prepend(commentItem); // Adiciona o novo comentário no topo da lista
+    commentInput.value = ''; // Limpa o campo de input
+}
+
+function removeComment(commentElement) {
+    // Confirmação para remover
+    if (confirm('Tem certeza que deseja remover este comentário?')) {
+        commentElement.remove(); // Remove o elemento do DOM
+    }
+}
+
+function editComment(paragraphElement) {
+    const currentText = paragraphElement.textContent;
+    const newText = prompt('Editar comentário:', currentText);
+
+    // Se o usuário digitou algo (não cancelou e não deixou vazio)
+    if (newText !== null && newText.trim() !== '') {
+        paragraphElement.textContent = newText.trim();
+    } else if (newText !== null && newText.trim() === '') {
+        alert('O comentário não pode ficar vazio.');
+    }
+    // Se newText é null, significa que o usuário clicou em "Cancelar" no prompt
+}
